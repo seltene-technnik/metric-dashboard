@@ -1,0 +1,593 @@
+<section>
+    <div class="container-fluid bg-colorgrey">
+        <div class="row m-0">
+
+            <div class="col-md-4 mt-2 p-0">
+                <!-- <div class="wifd120"> -->
+                  <!-- <label>Select Academic Year</label> -->
+                  <app-academic-year fromComponent="dashboard"></app-academic-year>
+                  <!-- <select class="form-select" [(ngModel)]="acdemicYearId" (change)="selectAcademicYearId($event)"> -->
+                    <!-- <option *ngFor="let year of academicYears" [value]="year.id" class="p-1">{{year.year}}</option> -->
+                  <!-- </select> -->
+                <!-- </div> -->
+              </div>
+
+            <div class="col-md-5">
+                <!-- <div class="row m-0">
+                    <div class="col-md-12">
+                        <div class="text-left">
+
+                            <ul class="ul-decial">
+                                <span class="system-head">System-Wide Goals</span>
+                                <li> 75% of students at each school will achieve annual typical growth on i-Ready
+                                    Reading and
+                                    Math assessments by 2024-25</li>
+                                <li>75% of students at each school will “Strongly Agree” that “God is present in my
+                                    life.” by 2024-25</li>
+                                <li>Each school will be rated Strong on at least 3/5 Essentials, including Supportive
+                                    Environment, at the conclusion of 2024-25</li>
+                                <li>Each school will fully enroll its Kindergarten by 2024</li>
+                                <li>Each school will operate within an approved budget</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div> -->
+            </div>
+            <div class="col-md-3" *ngIf="schools.length > 0">
+                <div class="getlowest_filds">
+                    <ul>
+                        <li>
+                            <span class="position-relative" (mouseleave)="closeOptions()">
+                                <label>Select School</label><br />
+                                <input type="text" class="comment_fild getlowest_fild fild_bg"
+                                    [formControl]="searchText" (focus)="enableFilter = true" #searchInput />
+                                <div class="search-lister" *ngIf="enableFilter">
+                                    <ul>
+                                        <li *ngFor="let school of filteredSchools | async" [value]="school.schoolId"
+                                            (click)="selectSchool(school)">{{school.name}}</li>
+                                    </ul>
+                                </div>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-8 pr-0">
+                <div class="row m-0">
+                    <div class="col-md-12 p-0">
+                        <div class="row m-0">
+                            <div class="col-md-12 col-lg-6 pl-0">
+                                <div class="card min-height-290  mt-2 mb-2">
+                                    <!-- <div class="card-body position-relative">
+                                        <div class="d-flex mt-2">
+                                            <div class="card-title font-weight-600">
+                                                <a [routerLink]="['/grades', 'ProficiencyGrade']">Academic Performance Summary</a>
+                                            </div>
+                                            <div class="posabs12"
+                                                [ngClass]="flags.proficienciFlags > 0 ? 'redmark' : 'greenmark'"></div>
+                                        </div>
+                                        <div class="content-page">
+                                            <div class="sub-title mb-5"> </div>
+                                            <canvas width="400" height="200" #academicPerformanceSummary></canvas>
+                                        </div>
+                                    </div> -->
+                                    <div class="card-body position-relative">
+                                        <div class="d-flex mt-2">
+                                            <div class="card-title font-weight-600">
+                                                <a [routerLink]="['/grades', 'ProficiencyGrade']">Overall
+                                                    TN Proficiencies</a>
+                                            </div>
+                                            <div class="posabs12"
+                                                [ngClass]="flags.proficienciFlags > 0 ? 'redmark' : 'greenmark'"></div>
+                                        </div>
+                                        <div class="content-page">
+                                            <div class="sub-title mb-5"> </div>
+                                            <canvas width="400" height="200" #OverallTNProficiencies></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card min-height-290  mt-2 mb-2">
+                                    <div class="card-body position-relative">
+                                        <!-- <div class="d-flex mt-2">
+                                            <div class="card-title font-weight-600">
+                                                <a [routerLink]="['/grades', 'ProficiencyGrade']">Overall
+                                                    TN Proficiencies</a>
+                                            </div>
+                                            <div class="posabs12"
+                                                [ngClass]="flags.proficienciFlags > 0 ? 'redmark' : 'greenmark'"></div>
+                                        </div>
+                                        <div class="content-page">
+                                            <div class="sub-title mb-5"> </div>
+                                            <canvas width="400" height="200" #OverallTNProficiencies></canvas>
+                                        </div> -->
+                                        <div class="d-flex mt-2">
+                                            <div class="card-title font-weight-600">
+                                                <a [routerLink]="['/grades', 'enrollment']">
+                                                    Enrollment Summary
+                                                </a>
+                                            </div>
+                                            <div class="posabs12"
+                                                [ngClass]="flags.enrollment > 0 ? 'redmark' : 'greenmark'"></div>
+                                        </div>
+                                        <div class="content-page">
+                                            <canvas width="400" height="200" #enrollmentChart></canvas>
+                                        </div>
+                                        <div class="sub-title mt-center pt-2">
+                                            Avg. Enrollment in K-2 = <span
+                                                [ngClass]="averageEnrollment < 20 ? 'status-code-red-2' : ''">{{averageEnrollment}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-lg-6 pl-0">
+                                <div class="card min-height-290  mt-2 mb-2">
+                                    <div class="card-body pt-155 position-relative">
+                                        <div class="mt-2">
+                                            <!-- <div class="d-flex mt-2">
+                                                <div class="card-title font-weight-600">
+                                                    <a [routerLink]="['/grades', 'NCEChange']">Academic Growth Summary</a>
+                                                </div>
+                                                <div class="posabs12"
+                                                    [ngClass]="flags.NCEChangeFlags > 0 ? 'redmark' : 'greenmark'">
+                                                </div>
+                                            </div>
+                                            <div class="content-page">
+                                                <div class="sub-title mb-5"> </div>
+                                                <canvas width="400" height="200" #academicGrowthSummary></canvas>
+                                            </div> -->
+                                            <div class="d-flex mt-2">
+                                                <div class="card-title font-weight-600">
+                                                    <a [routerLink]="['/grades', 'NCEChange']">Avg.
+                                                        Change in NCE</a>
+                                                </div>
+                                                <div class="posabs12"
+                                                    [ngClass]="flags.NCEChangeFlags > 0 ? 'redmark' : 'greenmark'">
+                                                </div>
+                                            </div>
+                                            <div class="content-page">
+                                                <div class="sub-title mb-5"> </div>
+                                                <canvas width="400" height="200" #avgChangeInNCE></canvas>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- <div class="card min-height-290  mt-2 mb-2">
+                                    <div class="card-body pt-155 position-relative">
+                                        <div class="d-flex mt-2">
+                                            <div class="card-title font-weight-600"><a
+                                                    href="https://www.5-essentials.org/" target="_blank">5 Essentials
+                                                    Performance Summary</a>
+                                            </div>
+                                            <div class="posabs12"
+                                                [ngClass]="flags.essentials > 0 ? 'redmark' : 'greenmark'"></div>
+                                        </div>
+                                        <div class="content-page">
+                                            <div class="sub-title margin-20">Overall Performance <span
+                                                    [ngClass]="{'status-code-well-organized': essentials.overallPerformance == 'Well-Organized', 'status-code-organized': essentials.overallPerformance == 'Organized', 'status-code-moderate' : essentials.overallPerformance == 'Moderately Organized', 'status-code-partially-organized' : essentials.overallPerformance == 'Partially Organized', 'status-code-no-organized' : essentials.overallPerformance == 'Not Yet Organized', 'status-code-low' : essentials.overallPerformance == 'Low Response'}">{{essentials.overallPerformance}}</span>
+                                            </div>
+                                            <div class="boxer-ranger mt-2">
+                                                <div class="boxer-20">Effective Leaders</div>
+                                                <div class="boxer-20">Collaborative Teachers</div>
+                                                <div class="boxer-20">Involved Families</div>
+                                                <div class="boxer-20">Supportive Environment</div>
+                                                <div class="boxer-20">Ambitious Instruction</div>
+                                            </div>
+                                            <div class="boxer-ranger firstbox">
+                                                <div class="boxer-20"
+                                                    [ngClass]="{'essentials-code-well-organized': essentials.effectiveLeaders == 'Very Strong', 'essentials-code-organized': essentials.effectiveLeaders == 'Strong', 'essentials-code-moderate' : essentials.effectiveLeaders == 'Neutral', 'essentials-code-partially-organized' : essentials.effectiveLeaders == 'Weak', 'essentials-code-no-organized' : essentials.effectiveLeaders == 'Very Weak', 'essentials-code-low' : essentials.effectiveLeaders == 'Low Response'}">
+                                                    {{essentials.effectiveLeaders}}</div>
+                                                <div class="boxer-20"
+                                                    [ngClass]="{'essentials-code-well-organized': essentials.collaborativeTeachers == 'Very Strong', 'essentials-code-organized': essentials.collaborativeTeachers == 'Strong', 'essentials-code-moderate' : essentials.collaborativeTeachers == 'Neutral', 'essentials-code-partially-organized' : essentials.collaborativeTeachers == 'Weak', 'essentials-code-no-organized' : essentials.collaborativeTeachers == 'Very Weak', 'essentials-code-low' : essentials.collaborativeTeachers == 'Low Response'}">
+                                                    {{essentials.collaborativeTeachers}}</div>
+                                                <div class="boxer-20"
+                                                    [ngClass]="{'essentials-code-well-organized': essentials.involvedFamilies == 'Very Strong', 'essentials-code-organized': essentials.involvedFamilies == 'Strong', 'essentials-code-moderate' : essentials.involvedFamilies == 'Neutral', 'essentials-code-partially-organized' : essentials.involvedFamilies == 'Weak', 'essentials-code-no-organized' : essentials.involvedFamilies == 'Very Weak', 'essentials-code-low' : essentials.involvedFamilies == 'Low Response'}">
+                                                    {{essentials.involvedFamilies}}</div>
+                                                <div class="boxer-20"
+                                                    [ngClass]="{'essentials-code-well-organized': essentials.supportiveEnvironment == 'Very Strong', 'essentials-code-organized': essentials.supportiveEnvironment == 'Strong', 'essentials-code-moderate' : essentials.supportiveEnvironment == 'Neutral', 'essentials-code-partially-organized' : essentials.supportiveEnvironment == 'Weak', 'essentials-code-no-organized' : essentials.supportiveEnvironment == 'Very Weak', 'essentials-code-low' : essentials.supportiveEnvironment == 'Low Response'}">
+                                                    {{essentials.supportiveEnvironment}}</div>
+                                                <div class="boxer-20"
+                                                    [ngClass]="{'essentials-code-well-organized': essentials.ambitiousInstruction == 'Very Strong', 'essentials-code-organized': essentials.ambitiousInstruction == 'Strong', 'essentials-code-moderate' : essentials.ambitiousInstruction == 'Neutral', 'essentials-code-partially-organized' : essentials.ambitiousInstruction == 'Weak', 'essentials-code-no-organized' : essentials.ambitiousInstruction == 'Very Weak', 'essentials-code-low' : essentials.ambitiousInstruction == 'Low Response'}">
+                                                    {{essentials.ambitiousInstruction}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
+
+                                <div class="card min-height-290 mt-2 mb-2">
+                                    <div class="card-body pt-155 position-relative d-flex flex-column justify-content-start align-items-center">
+                                        <div class="mt-2 w-100">
+                                        <div class="d-flex mt-2">
+                                            <div class="card-title font-weight-600">Blue Ribbon Calculator</div>
+                                        </div>
+
+                                        <div class="content-page text-center mt-4"> <!-- add mt-4 to push image lower -->
+                                            <div class="col-md-12 p-0 d-flex justify-content-center">
+                                            <div class="ribin">
+                                                <img src="../../assets/images/blueribbion.png" class="ribbon-image" />
+                                            </div>
+                                            </div>
+
+                                            <div class="row text-center mt-3">
+                                            <div class="card-title font-weight-500">
+                                                <a [href]="blueRibbon?.Spring" target="_blank">Spring {{blueRibbon?.year}}</a>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 p-0">
+                <div class="row m-0">
+                    <div class="col-md-12 p-0">
+                        <div class="card mt-2 mb-2">
+                            <div class="card-body">
+                                <div class="menu-title">Flag Notification</div>
+                                <div class="box-div">
+                                    <div class="d-flex mt-2">
+                                        <span class="mr-2"
+                                            [ngClass]="flags.academics > 0 ? 'redmark' : 'greenmark'"></span>
+                                        <div class="card-title font-weight-600 cursor-pointer"><a
+                                                 
+                                            target="_blank">ACADEMICS</a></div>
+                                    </div>
+                                    <div class="content-box">
+                                        <ul>
+                                            <li *ngFor="let flag of academicFlags | keyvalue"
+                                                [hidden]="flag.value == 'N' || flag.value == null || flag.value == 'no'">
+                                                {{flag.key}}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- <div class="box-div">
+                                    <div class="d-flex mt-2">
+                                        <span class="mr-2"
+                                            [ngClass]="flags.essentials > 0 ? 'redmark' : 'greenmark'"></span>
+                                        <div class="card-title font-weight-600 cursor-pointer"><a
+                                                href="https://docs.google.com/spreadsheets/d/1GxmPM6EzdhdInuSkTR3ZLhTjj8_KR0sjUlMw2Osp_N0/preview"
+                                                target="_blank">5 ESSENTIALS</a>
+                                        </div>
+                                    </div>
+                                    <div class="content-box">
+                                        <ul>
+                                            <li *ngFor="let flag of essentialsFlags | keyvalue"
+                                                [hidden]="flag.value == 'N' || flag.value == null">{{flag.key}}</li>
+                                        </ul>
+                                    </div>
+                                </div> -->
+                                <div class="box-div">
+                                    <div class="d-flex mt-2">
+                                        <span class="mr-2"
+                                            [ngClass]="flags.catholicIdentity > 0 ? 'redmark' : 'greenmark'"></span>
+                                        <div class="card-title font-weight-600"><a target="_blank">CATHOLIC IDENTITY</a>
+                                        </div>
+                                    </div>
+                                    <div class="content-box">
+                                        <ul>
+                                            <li *ngFor="let flag of catholicIdentity | keyvalue"
+                                                [hidden]="flag.value == 'N' || flag.value == null || flag.value == 'no'">
+                                                {{flag.key}}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="box-div">
+                                    <div class="d-flex mt-2">
+                                        <span class="mr-2"
+                                            [ngClass]="flags.enrollment > 0 ? 'redmark' : 'greenmark'"></span>
+                                        <div class="card-title font-weight-600"><a target="_blank">ENROLLMENT</a></div>
+                                    </div>
+                                    <div class="content-box">
+                                        <ul>
+                                            <li *ngFor="let flag of enrollmentOperationsFlag | keyvalue"
+                                                [hidden]="flag.value == 'N' || flag.value == null || flag.value == 'no'">
+                                                {{flag.key}}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-12 p-0">
+                        <div class="card mt-2 mb-2">
+                            <div class="card-body"> -->
+                                <!-- <div class="mt-2">
+                                    <div class="card-title font-weight-600"><a>Percent of Students</a>
+                                    </div>
+                                    <div class="row-m-0">
+                                        <div class="col-md-12">
+                                            <table class="bluebgtab">
+                                                <thead>
+                                                    <tr>
+                                                        <th>In Poverty</th>
+                                                        <th>On a Plan</th>
+                                                        <th>On Scholarship</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>N/A</td>
+                                                        <td>N/A</td>
+                                                        <td>N/A</td>
+                                                    </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="workinprgrs">
+                                        <img src="../../assets/images/workinprgrs.jpg">
+                                    </div>
+
+                                </div> -->
+                                <!-- <div class="card-title font-weight-600">Blue Ribbon Calculator</div>
+                                <div class="row m-0">
+                                    <div class="col-md-12 p-0">
+                                        <div class="ribin">
+                                            <img src="../../assets/images/blueribbion.png">
+                                        </div>
+                                    </div>
+                                    <div class="row text-center">
+                                        <div class="card-title font-weight-500">
+                                            <a [href]="blueRibbon?.Spring" target="_blank">Spring {{blueRibbon?.year}}</a>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <!-- <div class="card min-height-290  mt-2 mb-2">
+                                    <div class="card-body position-relative"> -->
+                                        <!-- <div class="d-flex mt-2">
+                                            <div class="card-title font-weight-600">
+                                                <a [routerLink]="['/grades', 'enrollment']">
+                                                    Enrollment Summary
+                                                </a>
+                                            </div>
+                                            <div class="posabs12"
+                                                [ngClass]="flags.enrollment > 0 ? 'redmark' : 'greenmark'"></div>
+                                        </div>
+                                        <div class="content-page">
+                                            <canvas width="400" height="200" #enrollmentChart></canvas>
+                                        </div>
+                                        <div class="sub-title mt-center pt-2">
+                                            Avg. Enrollment in K-2 = <span
+                                                [ngClass]="averageEnrollment < 20 ? 'status-code-red-2' : ''">{{averageEnrollment}}</span>
+                                        </div> -->
+                                    <!-- </div>
+                                </div> -->
+                            <!-- </div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <!-- 
+            <div class="col-md-12 p-0 pt-2 brd-3">
+                <table class="tables tdrmtd-2 bg-white">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Guardrail Step</th>
+                            <th class="text-center">Description</th>
+                            <th class="text-center">Description</th>
+                            <th class="text-center">Description</th>
+                            <th class="text-center">Description</th>
+                            <th class="text-center">Description</th>
+                        </tr>
+                   
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th class="cdr-white" scope="row">Flagging Indicator</th>
+                            <td>data</td>
+                            <td>data</td>
+                            <td>data</td>
+                            <td>data</td>
+                            <td>data</td>
+                          </tr>
+                          <tr>
+                            <th class="cdr-white" scope="row">Criteria</th>
+                            <td>data</td>
+                            <td>data</td>
+                            <td>data</td>
+                            <td>data</td>
+                            <td>data</td>
+                          </tr>
+                          <tr>
+                            <th class="cdr-white" scope="row">Focus Area Name</th>
+                            <td>data</td>
+                            <td>data</td>
+                            <td>data</td>
+                            <td>data</td>
+                            <td>data</td>
+                          </tr>
+                          <tr>
+                            <th class="cdr-white" scope="row">Data Sources</th>
+                            <td>data</td>
+                            <td>data</td>
+                            <td>data</td>
+                            <td>data</td>
+                            <td>data</td>
+                          </tr>
+                          <tr>
+                            <th class="cdr-white" scope="row">Possible
+                                Interventions</th>
+                            <td>data</td>
+                            <td>data</td>
+                            <td>data</td>
+                            <td>data</td>
+                            <td>data</td>
+                          </tr>
+                    </tbody>
+                </table>
+            </div> -->
+
+        </div>
+    </div>
+</section>
+<ng-template #mymodal let-modal>
+    <div class="col-md-12 pt-3 pr-3 text-right" (click)="modal.dismiss()">
+        <button class="btn mr-2 btn-secondary">Close</button>
+    </div>
+    <!-- <div class="flagtable" *ngFor="let flag of flagAcademics">
+        {{flag}}
+    </div> -->
+    <div class="col-md-12 p-2 brd-3">
+        <table class="tables pmpoptab bg-white">
+            <tr class="bgcolorgreym">
+                <th class="text-center">Guardrail Step</th>
+                <th class="text-center">Description</th>
+                <th class="text-center">Description</th>
+                <th class="text-center">Description</th>
+                <th class="text-center">Description</th>
+                <th class="text-center">Description</th>
+            </tr>
+            <tr>
+                <th class="textblack">Flagging Indicator</th>
+                <td>School Attainment-Reading
+                </td>
+                <td>School Attainment-Math
+                </td>
+                <td>Growth on Terra Nova
+                </td>
+                <td>Growth on Terra Nova
+                </td>
+                <td>Other Area(s) of Focus
+                </td>
+            </tr>
+            <tr>
+                <th class="textblack">Criteria</th>
+                <td>Majority of Students Not Proficient
+                </td>
+                <td>Majority of Students Not Proficient
+                </td>
+                <td>Student Weighted NCE is Negative
+                </td>
+                <td>Student Weighted NCE is Negative
+                </td>
+                <td>2 or More Flags
+                </td>
+            </tr>
+            <tr>
+                <th class="textblack">Focus Area Name</th>
+                <td>Reading Attainment
+                </td>
+                <td>Math Attainment
+                </td>
+                <td>Growth in Literacy Skills
+                </td>
+                <td>Growth in Numeracy/Math Skills
+                </td>
+                <td>Academic Culture
+                </td>
+            </tr>
+            <tr>
+                <th class="textblack">Data Sources</th>
+                <td class="text-left">Terra Nova, IXL, STAR, i-Ready; Fluency/Leveling Assessments, Teacher Assessments
+                </td>
+                <td class="text-left">Terra Nova, IXL, STAR, i-Ready; Fluency/Leveling Assessments, Teacher Assessments
+                </td>
+                <td class="text-left">Terra Nova, IXL, STAR, i-Ready; Teacher Assessments
+                </td>
+                <td class="text-left">Terra Nova, IXL, STAR, i-Ready; Teacher Assessments
+                </td>
+                <td class="text-left">School-Generated Surveys, Supportive Data (Meetings, Attendance, Schedules)
+                </td>
+            </tr>
+            <tr>
+                <th class="textblack">Possible Interventions</th>
+                <td>
+                    <ul>
+                        <li>
+                            Fully implement ADOM observations and instructional coaching model <b>to ensure that all
+                                teachers are observed biweekly.</b></li>
+                        <li>Consider additional and renewed professional development on current curriculum supports for
+                            literacy. <b>Consult with OCS on viable opportunities provided centrally.</b></li>
+                        <li><b>Develop a year-long curriculum scope and sequence plan with teachers to identify key
+                                objectives</b> linked to standards and designated formative assessments to measure
+                            progress.
+                        </li>
+                        <li><b>Adjust instructional minutes</b> to support the increased need for additional time to
+                            teach
+                            content.</li>
+                        <li><b>Identify specific sub-skills to highlight and focus on throughout the year</b> and
+                            implement
+                            tracking of student progress on formative assessments to measure progress</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Fully implement ADOM observations and instructional coaching model <b>to ensure that all
+                                teachers
+                                are observed biweekly.</b></li>
+                        <li>Consider additional and renewed professional development on current curriculum supports in
+                            Math.
+                            <b>Consult with OCS on viable opportunities provided centrally.</b>
+                        </li>
+                        <li><b>Develop a year-long curriculum scope and sequence plan with teachers to identify key
+                                objectives</b>
+                            linked to standards and designated formative assessments to measure progress.</li>
+                        <li><b>Adjust instructional minutes</b> to support the increased need for additional time to
+                            teach
+                            content.</li>
+                        <li><b>Identify specific sub-skills to highlight and focus on throughout the year</b> and
+                            implement
+                            tracking of student progress on formative assessments to measure progress</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li><b>Monitor and support teacher use of formative assessments</b> to track student progress
+                            and encourage growth.</li>
+                        <li><b>Adjust instructional minutes</b> to support the increased need for additional time to
+                            teach content.</li>
+                        <li> Fully implement ADOM observations and instructional coaching model <b>to ensure that all
+                                teachers are observed biweekly.</b></li>
+                        <li> Review your registration and enrollment procedures to ensure that you are <b>identifying
+                                all students appropriately.</b></li>
+                        <li>Assess current factors in students receiving access to content/skill mastery including
+                            technology and access to individualized, differentiated instruction. <b>Ensure a formal
+                                technology and resource plan is created that supports all students.</b> </li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li><b>Monitor and support teacher use of formative assessments</b> to track student progress
+                            and encourage growth.</li>
+                        <li><b>Adjust instructional minutes</b> to support the increased need for additional time to
+                            teach content.</li>
+                        <li> Fully implement ADOM observations and instructional coaching model <b>to ensure that all
+                                teachers are observed biweekly.</b></li>
+                        <li> Review your registration and enrollment procedures to ensure that you are <b>identifying
+                                all students appropriately.</b></li>
+                        <li>Assess current factors in students receiving access to content/skill mastery including
+                            technology and access to individualized, differentiated instruction. <b>Ensure a formal
+                                technology and resource plan is created that supports all students.</b> </li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li> Review <b>professional development calendar</b> in the ADOM Dashboard, and discuss/reflect
+                            on opportunities to collaborate among teachers and discuss curricular issues. <b>Identify
+                                specific time and frequency of activities for teacher collaboration and reflection.</b>
+                        </li>
+                        <li>Review student behavioral data and discuss implications among the staff to implement
+                            specific cultural changes across the school. <b>Develop grade level teams and action plans
+                                to address specific behavioral and cultural issues at the school.</b></li>
+                        <li><b>Address any outstanding cultural issues that stem from school surveys</b> or other
+                            anecdotal information about student behavior, teacher culture and parent perception about
+                            the school</li>
+                        <li>Add and identify <b>new professional development on current curriculum supports that connect
+                                to specific measures on school surveys or other sources of information.</b> </li>
+
+                    </ul>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</ng-template>

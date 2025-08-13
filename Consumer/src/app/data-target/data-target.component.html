@@ -1,0 +1,55 @@
+<div class="container-fluid">
+  <div class="row mt-2">
+    <div class="parastem pt-4 mt-1" style="list-style-type: none; text-align: justify">
+      Your school’s Suggested Annual Data Target has been identified based on key metrics from the ADOM Dashboard page. To help focus in on areas of growth, OCS has prioritized recommended data that highly correlates to school success. Depending on where your school is currently performing, you’ll see one of three goals appear in your Suggested Annual Data Target box - 1) Students will have a positive NCE Growth in Reading and Math, 2) 50% or higher of students will be at proficient in Math and Reading, or 3) All grade levels will meet/exceed Blue Ribbon cut scores. Your Suggested ADT can help you identify where to dedicate time and attention this school year. Also, here is a <a target="_new" href="https://docs.google.com/document/d/1lhNfY7owWhSoHE4RGU0g-yJvXX9KSG5fxroUJCRpue4/copy">Trends Analysis Template</a> to help support your data work! 
+
+    </div>
+    &nbsp;
+    <p class="parastem">
+      When you add an ADT, your ADT-1 will automatically display at the top of the Data & Assessment and PD Plan pages.
+    </p>
+    <div class="col-md-4 mb-2">
+      <app-academic-year></app-academic-year>
+    </div>
+    <div>
+      <p class="system-head-adt">{{this.academicYear}} : SUGGESTED ANNUAL DATA TARGET</p>
+      <input
+        class="form-control py-3 adt-boxer"
+        type="text"
+        disabled
+        [value]="defaultADT"
+        placeholder="N/A"
+      />
+      <div class="text-right mt-2">
+        <button class="btn btn-primary" (click)="addInput()">Add ADT</button>
+      </div>
+    </div>
+    
+    <div *ngIf="inputDataArray.length > 0">
+      <p class="system-head-adt">{{this.academicYear}} : ANNUAL DATA TARGET - 1</p>
+      
+      <!-- <textarea style="overflow:hidden;" [rows]=3 cdkTextareaAutosize cdkAutosizeMinRows="3" class="goal-boxer" type="text" maxlength="65535" placeholder="Hello"></textarea> -->
+      <form [formGroup]="dataForm">
+        <div formArrayName="inputDataArray">
+          <div *ngFor="let control of inputDataArray.controls; let i = index" class="input-group mt-2">
+            <textarea
+              [formControlName]="i"
+              style="overflow: hidden"
+              [rows]="rows[i] ? rows[i] : 2"
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="1"
+              class="form-control py-3 adt-boxer"
+              type="text"
+              maxlength="65535"
+              placeholder="Add your Annual Data Target Here..."
+            ></textarea>
+            <button (click)="removeItem(i)" class="btn btn-primary" ngbTooltip="Delete Target">X</button>
+          </div>
+        </div>
+      </form>
+      <div class="text-right mt-2">
+        <button class="btn btn-primary" (click)="saveData()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

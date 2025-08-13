@@ -1,0 +1,214 @@
+<div class="container-fluid">
+    <div class="row rbox">
+        <div class="row mt-2">
+            <div *ngIf="!enableUsersData" class="col-md-5">
+                <div class="input-group">
+                    <div class="system-head">Upload CSIP Data</div>
+                    <input class="impbgr" type="file" (change)="onFileChange($event, 'csipData')" #inptExcel
+                        accept=".xlsx" (click)="inptExcel.value=''">
+                    <button type="button" (click)="uploadExcelFile('csipData')"
+                        class="btn btn-primary">Upload</button>
+                </div>
+            </div>
+            <div *ngIf="!enableUsersData" class="col-md-1">
+                <div class="wifd120">
+                    <select class="form-select p-1"  [(ngModel)]="academicYearId">
+                        <option *ngFor="let year of academicYears" [value]="year.id" class="p-1">{{year.year}}</option>
+                    </select>
+                </div>
+            </div>
+            <div *ngIf="!enableUsersData" class="col-md-1">
+                <div class="wifd120">
+                    <button class="btn btn-primary" ngbTooltip="Create Academic Year" (click)="openModal()">+</button>
+                </div>
+            </div>
+            <div *ngIf="!enableUsersData" class="col-md-3 p-0">
+                <input
+                type="text"
+                placeholder="Search by school name"
+                class="form-input-my"
+                (keyup)="applyFilter($event, 'csip')"
+                #input
+                />
+            </div>
+            <div *ngIf="enableUsersData" class="col-md-7">
+                <!-- <div class="getlowest_filds text-left"> -->
+                <!-- <label class="system-head">Upload Users Data</label> -->
+                <div class="input-group">
+                    <div class="system-head">Upload Users Data</div>
+                    <input class="impbgr" type="file" (change)="onFileChange($event, 'usersData')"
+                        accept=".xlsx">
+                    <button type="button" (click)="uploadExcelFile('usersData')"
+                        class="btn btn-primary">Upload</button>
+                </div>
+                <!-- </div> -->
+            </div>
+            <div *ngIf="enableUsersData" class="col-md-3">
+                <input
+                type="text"
+                placeholder="Search by user First Name, Last Name etc..."
+                class="form-input-my"
+                (keyup)="applyFilter($event, 'user')"
+                #input
+                />
+            </div>
+            <div class="col-md-2">
+                <select class="form-select" [(ngModel)]="uploadType" (change)="changeDataUpload()">
+                    <option value="usersData">Users Data</option>
+                    <option value="csipData">CSIP Data</option>
+                </select>
+            </div>
+        </div>
+        <div class="text-left mt-2" *ngIf="enableUsersData">
+            <!-- <div class="getlowest_filds text-left">
+                <label>Users Data</label>
+            </div> -->
+            <div class="row m-0">
+                <!-- <div class="col-md-5 mb-3 text-left pt-1 px-0">
+                    <div class="getlowest_filds text-left">
+                        <label>Upload Users Data</label>
+                        <div class="input-group">
+                            <input class="impbgr" type="file" (change)="onFileChange($event, 'usersData')"
+                                accept=".xlsx">
+                            <button type="button" (click)="uploadExcelFile('usersData')"
+                                class="btn btn-primary">Upload</button>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="bg-info text-white widthm-320" *ngIf="userTableData.length == 0">No Records Found</div>
+                <div *ngIf="userTableData.length != 0" class="col-md-12 p-0">
+                    <div>
+                        <label class="emaillabel" style="padding: 5px 10px; font-size: 13px;">
+                            <input class="form-input" type="checkbox" value="Admin" (change)="filterForUserTable($event)"> <span
+                                class="pose123">Admin</span>
+                        </label>
+                        <label class="emaillabel" style="padding: 5px 10px; font-size: 13px;">
+                            <input class="form-input" type="checkbox" value="Principal"
+                                (change)="filterForUserTable($event)"><span class="pose123">Principal</span>
+                        </label>
+                        <label class="emaillabel" style="padding: 5px 10px; font-size: 13px;">
+                            <input class="form-input" type="checkbox" value="Guest"
+                                (change)="filterForUserTable($event)"><span class="pose123">Guest</span>
+                        </label>
+                    </div>
+                    <div class="table-responsive tmdscroll">
+                        <!--Table-->
+                        <table class="table t-textleft table-striped">
+
+                            <!--Table head-->
+                            <thead>
+                                <tr>
+                                    <th *ngFor="let col of userTableColumnOrder">{{col}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let row of getPaginatedData('user') let rowIndex = index">
+                                    <td *ngFor="let col of userTableColumnOrder">{{ row[col] }}</td>
+                                </tr>
+                                    <!-- <tr *ngFor="let user of userTableData">
+                                        <td *ngFor="let col of userTableColumnOrder">{{ user[col] }}</td>
+                                    </tr> -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div *ngIf="csipDataForTable.length != 0" class="col-md-12 mt-3 mb-2 text-right p-0">
+                        <nav aria-label="Page navigation example">
+                            <div class="pagination float-right">
+                                <button class="page-item page-link" *ngFor="let pageNumber of getPageNumbers('user')" (click)="setPage(pageNumber)">
+                                    {{ pageNumber }}
+                                </button>
+                                <!-- <li class="page-item"><a class="page-link" href="#">Previous</a></li> -->
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!enableUsersData">
+            <div class="row m-0 mt-2">
+                <div class="col-md-12 p-0">
+                    <div class="bg-info text-white widthm-320" *ngIf="csipDataForTable.length == 0">No Records Found</div>
+                    <div class="table-responsive tmdscroll">
+                        <table class="table table-striped" *ngIf="csipDataForTable.length != 0">
+                            <thead>
+                              <tr>
+                                <ng-container *ngFor="let parentColumn of tableData">
+                                  <th [attr.colspan]="parentColumn.childColumns.length"
+                                  [ngClass]="getCellClass(parentColumn.name)">
+                                    {{ parentColumn.name }}
+                                  </th>
+                                </ng-container>
+                              </tr>
+                              <tr>
+                                <ng-container *ngFor="let parentColumn of tableData">
+                                  <ng-container *ngFor="let childColumn of parentColumn.childColumns">
+                                    <th>{{ childColumn }}</th>
+                                  </ng-container>
+                                </ng-container>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                <!-- <tr *ngFor="let row of getPaginatedData() let rowIndex = index">
+                                    <ng-container *ngFor="let parentColumn of tableData; let colIndex = index">
+                                      <ng-container *ngFor="let childColumn of parentColumn.childColumns">
+                                        <td [ngClass]="getCellClass(tableData[colIndex].data[rowIndex][childColumn])">
+                                            {{ tableData[colIndex].data[rowIndex][childColumn] }}
+                                        </td>
+                                      </ng-container>
+                                    </ng-container>
+                                </tr> -->
+                                <tr *ngFor="let row of getPaginatedData('csip') let rowIndex = index">
+                                    <ng-container *ngFor="let parentColumn of tableData; let colIndex = index">
+                                      <ng-container *ngFor="let childColumn of parentColumn.childColumns">
+                                        <td [ngClass]="getCellClass(row[childColumn])"
+                                            [innerHTML]="updateCellValue(childColumn, row[childColumn])">
+                                        </td>
+                                      </ng-container>
+                                    </ng-container>
+                                </tr>
+                              </tbody>
+                          </table> 
+                    </div>
+                </div>
+                                                            
+                <div *ngIf="csipDataForTable.length != 0" class="col-md-12 mt-3 mb-2 text-right p-0">
+                    <nav aria-label="Page navigation example">
+                        <div class="pagination float-right">
+                            <button class="page-item page-link" *ngFor="let pageNumber of getPageNumbers('csip')" (click)="setPage(pageNumber)">
+                                {{ pageNumber }}
+                            </button>
+                            <!-- <li class="page-item"><a class="page-link" href="#">Previous</a></li> -->
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #myModal let-modal>
+
+    <div class="col-md-12 mt-2   pr-2 text-right">
+        <button type="button" class="btn btn-close1" (click)="modal.dismiss()">x</button>
+    </div>
+    <form >
+        <div class="row m-0">
+            <div class="col-md-10 emailinput  offset-md-1 col-12  ">
+                <div class="col-12">
+                    <label for="academicYearName" class="emaillabel">Academic Year</label>
+                    <input type="text" class="form-control email" [formControl]="academicYearName" placeholder="ex : 2024-25">
+
+                    <div *ngIf="submitted && academicYearName.touched">
+                        <span class="error" *ngIf="academicYearName.hasError('required')">Academic Year Can't be Empty.</span>
+                        <div class="error" *ngIf="academicYearName.hasError('invalidAcademicYear')">Invalid format. Expected format is "2023-24".</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row m-0">
+            <div class="col-md-10 offset-md-1 mt-1   mb-2 text-right">
+                <button type="submit" class="btn btn-primary" (click)="createAcademicYear()" >Save</button>
+            </div>
+        </div>
+    </form>
+</ng-template>

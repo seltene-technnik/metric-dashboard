@@ -1,0 +1,62 @@
+.deleting img{
+    width: 28px;
+}
+.deleting {
+    width: 28px;
+    cursor: pointer;
+}
+.system-head{
+    text-align: left;
+    color: #2b2b2b;
+    font-size: 15px;
+    text-decoration: underline;
+    font-weight: 600;
+    display: block;
+
+}
+.yearsch{
+    color: #cf930e;
+    font-size: 14px;
+    text-align: center;
+}
+.btn-blue-my {
+    color: #fff;
+    background-color: #8599ff;
+    border-color: #8599ff;
+}
+.carousel-item{
+    border-bottom: none !important;
+}
+.carousel-indicators .active{
+    background-color: #8599ff;
+}
+.year1, .year2, .year3{
+    width: 30px;
+    height: 7px;
+    padding: 2px 0px;
+    background-color: #74788d;
+    margin-top: 10px;
+    margin: 2px 5px;
+    font-size: 13px;
+    border-bottom: none;
+    cursor: pointer;
+}
+
+.posinion{
+    position: initial !important;
+}
+.make-center{ 
+    display: flex;
+    justify-content: center;
+}
+.display-table{
+    display: table;
+}
+.table-middle{
+    display: table-cell; vertical-align: middle;
+}
+
+li::marker {
+    content: '';
+    font-size: 0;
+}

@@ -1,0 +1,35 @@
+<!-- Header Part -->
+<div class="conatainer-fluid">
+    <div class="row m-0 header-block-main21"></div>
+    <div class="row m-0 pt-1 bg-white pb-1">
+        <div class="col-md-3">
+            <div class="width-logo"> <img routerLink="/dashboard" class="cursor-pointer" src="../../assets/images/DIOCESE-of-PALM-BEACH.png" /> </div>
+        </div>
+        <div class="col-md-9 minfpad" *ngIf="enableMenu">
+            <div ngbDropdown>
+                <div class="profile-user" id="dropdownBasic1" ngbDropdownToggle>{{username}}</div>
+                <div class="profmenu" ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button ngbDropdownItem (click)="logout()">Logout</button>
+                </div>
+            </div>
+            <div class="menu-user" *ngIf="isInAdminPanel">
+                <ul>
+                    <li routerLink="/admin" *ngIf="adminFlag"><a routerLinkActive="active">Admin</a></li>
+                    <li routerLink="/dashboard"><a routerLinkActive="active">Dashboard</a></li>
+                </ul>
+            </div>
+            <div class="menu-user" *ngIf="!isInAdminPanel">
+                <ul>
+                    <li routerLink="/admin" *ngIf="adminFlag"><a routerLinkActive="active">Admin</a></li>
+                    <li routerLink="/dashboard"><a routerLinkActive="active">Archdiocese Data</a></li>
+                    <li routerLink="/dataTarget"><a routerLinkActive="active">Annual Data Target</a></li>
+                    <li routerLink="/dataplan"><a routerLinkActive="active">Data & Assessment Plan</a></li>
+                    <li routerLink="/pdplan"><a routerLinkActive="active">PD Plan</a></li>
+                    <!-- <li routerLink="/planning"><a routerLinkActive="active">Action Planning</a></li> -->
+                    <li routerLink="/users" *ngIf="enableUserMenu"><a routerLinkActive="active">Users</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Header Part End -->

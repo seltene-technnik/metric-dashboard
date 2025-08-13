@@ -1,0 +1,233 @@
+<section>
+    <div class="container-fluid bg-colorgrey">
+        <div class="row ml-0 mr-0 mt-3">
+            <!-- <div class="col-md-9">
+                <div class="row m-0">
+                    <div class="col-md-12 pl-0">
+                        <div class="text-left">
+                            <div class="system-head">See It - Name It - Do It
+                            </div>
+                            <div> Please click on the Data Meeting Guide button to access your school's "See It, Name
+                                It, Do It" template. After completing the protocol, use the "Add Priority" button to
+                                paste your completed Data Meeting Guide into the CSIP platform.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3 text-right">
+                <button class="btn mt-3 btn-blue-my">Data Meeting Guide</button>
+            </div> -->
+            <div class="col-md-4">
+                <button class="btn btn-primary" (click)="addArea()">Add Priority Area</button>
+            </div>
+            <div class="col-md-3 mt-2 offset-md-5">
+                <select class="form-select" [(ngModel)]="priorityType" (change)="updateAction()">
+                    <option value="mission">Mission and Catholic Identity</option>
+                    <option value="leadership">Governance and Leadership</option>
+                    <option value="excellence">Academic Excellence</option>
+                    <option value="vitality">Operational Vitality</option>
+                </select>
+            </div>
+        </div>
+
+
+        <form [formGroup]="priorityAreaForm">
+            <div formArrayName="areas">
+                <!-- <div class="text-center mt-2" *ngIf="enableYear"><strong>SY {{academicDate}}</strong></div> -->
+                <div class="paddingboxer" *ngFor="let area of getAreasControls;let i = index" [formGroupName]="i">
+                    <div class="row ml-0 mr-0 mt-1">
+                        <div class="col-md-8">
+                            <div class="heading-goal">PRIORITY AREA {{i+1}} </div>
+                        </div>
+                        <div class="col-md-4 text-right" (click)="open(mymodal, i)">
+                            <a class="deleting tooltip-h">
+                                <svg x="0px" y="0px" width="30" height="30" viewBox="0 0 30 30" style=" fill:#000;">
+                                    <path
+                                        d="M 10 2 L 9 3 L 3 3 L 3 5 L 21 5 L 21 3 L 15 3 L 14 2 L 10 2 z M 4.3652344 7 L 6.0683594 22 L 17.931641 22 L 19.634766 7 L 4.3652344 7 z">
+                                    </path>
+                                </svg>
+                            </a>
+                        </div>
+                        <div class="col-md-12">
+                            <div id="myCarousel" class="carousel slide">
+                                <div class="carousel-inner">
+                                    <div *ngIf="isActive1" class="carousel-item" [class.active]="isActive1">
+                                        <div class="col-md-12" formArrayName="year1">
+                                            <div *ngFor="let year of priorityAreaYears(i, 'year1').controls;let y1 = index"
+                                                [formGroupName]="y1">
+                                                <textarea style="overflow:hidden;" [rows]="year.value.rows" cdkTextareaAutosize cdkAutosizeMinRows="3" class="goal-boxer" type="text" formControlName=value
+                                                    maxlength="65535"
+                                                    [placeholder]="getPlaceholder('Year 1', y1)"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isActive2" class="carousel-item" [class.active]="isActive2">
+                                        <div class="col-md-12" formArrayName="year2">
+                                            <div *ngFor="let year of priorityAreaYears(i, 'year2').controls;let y2 = index"
+                                                [formGroupName]="y2">
+                                                <textarea style="overflow:hidden" [rows]="year.value.rows" cdkTextareaAutosize cdkAutosizeMinRows="3" type="text" class="goal-boxer" formControlName=value
+                                                    maxlength="65535"
+                                                    [placeholder]="getPlaceholder('Year 2', y2)"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isActive3" class="carousel-item" [class.active]="isActive3">
+                                        <div class="col-md-12" formArrayName="year3">
+                                            <div *ngFor="let year of priorityAreaYears(i, 'year3').controls;let y3 = index"
+                                                [formGroupName]="y3">
+                                                <textarea style="overflow:hidden;" [rows]="year.value.rows" cdkTextareaAutosize cdkAutosizeMinRows="3" type="text" class="goal-boxer" formControlName=value
+                                                    maxlength="65535"
+                                                    [placeholder]="getPlaceholder('Year 3', y3)"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ul class="carousel-indicators posinion" *ngIf="enableYear && yearCount == 2">
+                    <li class="year1" [class.active]="isActive1" (click)="navigateToYears('year1')">
+                    </li>
+                    <li class="year2" [class.active]="isActive2" (click)="navigateToYears('year2')">
+                    </li>
+                </ul>
+                <ul class="carousel-indicators posinion" *ngIf="enableYear && yearCount == 3">
+                    <li class="year1" [class.active]="isActive1" (click)="navigateToYears('year1')">
+                    </li>
+                    <li class="year2" [class.active]="isActive2" (click)="navigateToYears('year2')">
+                    </li>
+                    <li class="year3" [class.active]="isActive3" (click)="navigateToYears('year3')">
+                    </li>
+                </ul>
+            </div>
+            <div class="row m-0">
+                <div class="col-md-4 offset-md-4 text-center">
+                    <div class="alert alert-success" *ngIf="enableMsg">
+                        <div>Success!! Priorities saved.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-right" *ngIf="getAreasControls.length > 0">
+                    <span *ngIf="yearCount != 3 && enableAddYear">
+                        <button class="btn btn-secondary" type="button" (click)="updateNextYear()">Add
+                            Year</button>
+                    </span>
+                    <span class="pl-2">
+                        <button class="btn btn-primary" type="button" (click)="saveActionItems()">Save</button>
+                    </span>
+                </div>
+            </div>
+        </form>
+
+
+        <!-- <form [formGroup]="priorityAreaForm">
+            <div formArrayName="areas">
+                <div class="paddingboxer" *ngFor="let area of getAreasControls;let i = index" [formGroupName]="i">
+                    <div class="row ml-0 mr-0 mt-1">
+                        <div class="col-md-8">
+                            <div class="heading-goal">PRIORITY AREA {{i+1}} </div>
+                        </div>
+                        <div class="col-md-4 text-right" (click)="open(mymodal, i)">
+                            <a class="deleting tooltip-h">
+                                <svg x="0px" y="0px" width="30" height="30" viewBox="0 0 30 30" style=" fill:#000;">
+                                    <path
+                                        d="M 10 2 L 9 3 L 3 3 L 3 5 L 21 5 L 21 3 L 15 3 L 14 2 L 10 2 z M 4.3652344 7 L 6.0683594 22 L 17.931641 22 L 19.634766 7 L 4.3652344 7 z">
+                                    </path>
+                                </svg>
+                                <div class="tooltip-p">Delete</div>
+                            </a>
+                        </div>
+                        <div class="col-md-1 make-center col-1">
+                            <div class="display-table">
+                                <div class="table-middle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+                                        <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+                                      </svg>
+                                      <div class="yearsch">Year 1</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12" formArrayName="year1">
+                            <div class="text-center mt-2"><strong>YEAR 1</strong></div>
+                            <div *ngFor="let year of priorityAreaYears(i, 'year1').controls;let y1 = index"
+                                [formGroupName]="y1">
+                                <textarea type="text" class="goal-boxer" formControlName=value maxlength="65535"
+                                    [placeholder]="getPlaceholder('Year 1', y1)"></textarea>
+                            </div>
+                        </div>
+                        <div>
+                            <ul class="carousel-indicators posinion">
+                                <li *ngIf="yearCount >= 2" class="year1" [class.active]="isActive1" (click)="navigateToYears('year1')">
+                                </li>
+                                <li *ngIf="yearCount >= 2" class="year2" [class.active]="isActive2" (click)="navigateToYears('year2')">
+                                </li>
+                                <li *ngIf="yearCount == 3" class="year3" [class.active]="isActive3" (click)="navigateToYears('year3')">
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-1 make-center col-1">
+                            <div class="display-table">
+                                <div class="table-middle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
+                                        <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                                      </svg>
+                                      <div class="yearsch">Year 3</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4" formArrayName="year2">
+                            <div class="text-center mt-2"><strong>YEAR 2</strong></div>
+                            <div *ngFor="let year of priorityAreaYears(i, 'year2').controls;let y2 = index"
+                                [formGroupName]="y2">
+                                <textarea type="text" class="goal-boxer" formControlName=value maxlength="65535"
+                                    [placeholder]="getPlaceholder('Year 2', y2)"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-4" formArrayName="year3">
+                            <div class="text-center mt-2"><strong>YEAR 3</strong></div>
+                            <div *ngFor="let year of priorityAreaYears(i, 'year3').controls;let y3 = index"
+                                [formGroupName]="y3">
+                                <textarea type="text" class="goal-boxer" formControlName=value maxlength="65535"
+                                    [placeholder]="getPlaceholder('Year 3', y3)"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-0">
+                <div class="col-md-4 offset-md-4 text-center">
+                    <div class="alert alert-success" *ngIf="enableMsg">
+                        <div>Success!! Priorities saved.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-right" *ngIf="getAreasControls.length > 0">
+                    <span>
+                        <button class="btn btn-secondary" type="button">Add Year</button>
+                    </span>
+                    <span class="pl-2">
+                        <button class="btn btn-primary" type="button" (click)="saveActionItems()">Save</button>
+                    </span>
+                </div>
+            </div>
+        </form> -->
+    </div>
+</section>
+
+<ng-template #mymodal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Priority Area</h4>
+        <button type="button" class="close-button" aria-label="Close" (click)="modal.dismiss()">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        Are you sure you want to delete ?
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.close()">No</button>
+        <button type="button" class="btn btn-primary" (click)="deletePriorityArea()">Yes</button>
+    </div>
+</ng-template>

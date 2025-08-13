@@ -1,0 +1,8 @@
+<div class="mt-2 p-0">
+    <div class="wifd120">
+      <label>Select Academic Year</label>
+      <select class="form-select" [(ngModel)]="acdemicYearId" (change)="selectAcademicYearId($event)">
+        <option *ngFor="let year of filteredAcademicYears" [value]="year.id" class="p-1">{{year.year}}</option>
+      </select>
+    </div>
+  </div>

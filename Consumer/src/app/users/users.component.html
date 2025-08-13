@@ -1,0 +1,96 @@
+<div class="container-fluid">
+    <div class="row m-0">
+        <div class="col-md-4 offset-md-4 mb-3 text-right pt-5  ">
+            <button type="button" class="btn btn-primary" (click)="openModal()">Add User</button>
+        </div>
+    </div>
+    <div class="row m-0">
+        <div class="col-md-4 p-0 bg-white brd-3 offset-md-4">
+            <table class="tables">
+                <thead>
+                    <tr>
+                        <th class="first">User</th>
+                        <th class="text-right">Active</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let user of users;let i = index">
+                        <td>
+                            <div class="row p-2 m-0">
+                                <div class=" image  mb-2">
+                                    <p>{{user.profile}}</p>
+                                </div>
+                                <div class="col-8">
+                                    <p class="mb-0 pt-1 name"><b>{{user.name}}</b></p>
+                                    <p class="mb-0 email">{{user.email}}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-right pr-2">
+                            <label class="switch">
+                                <input type="checkbox" [checked]="user.isActive" (change)="updateStatus(i)">
+                                <span class="slider round"></span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr *ngIf="users.length == 0"><div class="email p-2">Add new users above</div></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<ng-template #myModal let-modal>
+
+    <div class="col-md-12 mt-2   pr-2 text-right">
+        <button type="button" class="btn btn-close1" (click)="modal.dismiss()">x</button>
+    </div>
+    <div class="row m-0">
+        <div class="col-md-10 offset-md-1 col-12  ">
+            <div *ngIf="userExist" class="alert alert-danger mb-1 text-left mt-1"> User already exists</div>
+            <div *ngIf="userSuccess" class="alert alert-success mb-1 text-left mt-1"> User created successfully</div>
+        </div>
+    </div>
+    <form [formGroup]="user">
+        <div class="row m-0">
+            <div class="col-md-10 emailinput  offset-md-1 col-12  ">
+                <div class="col-12">
+                    <label for="fname" class="emaillabel">First Name</label>
+                    <input type="text" class="form-control email" formControlName="firstName">
+                    <div *ngIf="user.get('firstName')?.errors?.['required'] && submitted"
+                        class="alert alert-danger text-left mt-1">
+                        First Name is
+                        required</div>
+                </div>
+                <div class="col-12">
+                    <label for="lname" class="emaillabel">Last Name</label>
+                    <input type="text" class="form-control email" formControlName="lastName">
+                    <div *ngIf="user.get('lastName')?.errors?.['required'] && submitted"
+                        class="alert alert-danger text-left mt-1">
+                        Last Name is
+                        required</div>
+                </div>
+            </div>
+        </div>
+        <div class="row m-0">
+            <div class="col-md-10 emailinput offset-md-1 col-12  ">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="email" class="emaillabel"> Email</label>
+                        <input type="email" class="form-control email" formControlName="email">
+                        <div *ngIf="user.get('email')?.errors?.['required'] && submitted"
+                            class="alert alert-danger text-left mt-1">
+                            Email is
+                            required</div>
+                        <div *ngIf="user.get('email')?.errors?.['email'] && submitted"
+                            class="alert alert-danger text-left mt-1">
+                            Incorrect email
+                            address</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-10 offset-md-1 mt-1   mb-2 text-right">
+                <button type="button" class="btn btn-primary" (click)="createGuestUser()">Save</button>
+            </div>
+        </div>
+    </form>
+</ng-template>

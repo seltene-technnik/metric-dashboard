@@ -1,0 +1,160 @@
+<div class="container-fluid">
+    <div class="row m-0 pt-3">
+        <div>
+            <p class="system-head-adt">{{this.academicYear}} : ANNUAL DATA TARGET</p>
+            <textarea
+              class="form-control py-3 adt-boxer"
+              style="overflow: hidden; background-color: #e9ecef;"
+              type="text"
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="1"
+              disabled
+              placeholder="N/A"
+              [value]="additionalADT[0]?.value"
+              [rows]="additionalADT[0]?.row"
+            ></textarea>
+        </div>
+        <div class="col-md-4">
+            <app-academic-year></app-academic-year>
+        </div>
+        <div *ngIf="dataAssesmentPlanArray.length > 0" class="col-md-12 text-right p-0 pt-3">
+            <button class="btn btn-primary-myblue" (click)="enableEdit()">Edit</button>
+            <button class="btn btn-primary-myblue" (click)="saveDataAssesment()">Save</button>
+            <div *ngIf="!editable" class="display-inline" ngbDropdown>
+                <span ngbDropdownToggle class="pr-2 pdicon cursor-pointer pl-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                        class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                        <path
+                            d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+                    </svg>
+                </span>
+                <div class="profmenu" ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button ngbDropdownItem class="btn btn-primary-myblack" (click)="exportToPDF()">Export to
+                        PDF</button>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="dataAssesmentPlanArray.length === 0" class="col-md-12 text-right p-0 pt-3">
+            <button class="btn btn-primary-myblue" (click)="addRow()">Add Data And Assesment Plan</button>
+        </div>
+        <!-- <div id="header-data" class="d-flex flex-row justify-content-between adt-boxer mx-4">
+            <div class="p-4"><span class="fw-bolder">School : </span> XYZ School</div>
+            <div class="p-4"><span class="fw-bolder">School Year : </span> 2024-25</div>
+            <div class="p-4"><span class="fw-bolder">County : </span> County Here </div>
+        </div> -->
+        <div *ngIf="dataAssesmentPlanArray.length > 0" class="col-md-12 pl-1 pr-1 pt-2 brd-3" #contentToExport>
+            <table class="tables mdlearning tdrmtd bg-white">
+                <thead>
+                    <tr>
+                        <th colspan="8" class="text-center">{{this.academicYear}} Plan to Assess Progress</th>
+                    </tr>
+                    <tr>
+                        <th class="cdr-white">Assessment Name</th>
+                        <th class="cdr-white">Assessment Type </th>
+                        <th class="cdr-white">Who is Assessed?</th>
+                        <th class="cdr-white">When is data collected? </th>
+                        <th class="cdr-white">Learning Target </th>
+                        <th class="cdr-white">Who is responsible for collecting and keeping track of data?</th>
+                        <th class="cdr-white">Check box if this assessment directly support my ADT?</th>
+                    </tr>
+                </thead>
+                <tbody>       
+                    <tr *ngFor="let item of dataAssesmentPlanArray; let i = index;">
+                        <td *ngIf="!editable" style="text-align: justify">{{item.assesmentName}}</td>
+                        <td *ngIf="editable" >
+                            <textarea [(ngModel)]="item.assesmentName" placeholder="IXL, STAR, i-Ready, Terra Nova"
+                                    (keyup)="addData($event, i, 1)" rows="3"
+                                    required class="form-control adt-boxer" ></textarea>
+                        </td>
+                        <td *ngIf="!editable" style="text-align: justify" aria-placeholder="Assessment Name">{{item.assesmentType}}</td>
+                        <td *ngIf="editable" >
+                            
+                                <textarea 
+                                    [(ngModel)]="item.assesmentType" 
+                                    
+                                    placeholder="Formative, Summative, Online"
+                                    (keyup)="addData($event, i, 2)" 
+                                    rows="3"
+                                    required 
+                                    maxlength="65535"
+                                    class="form-control adt-boxer"
+                                    
+                                >
+                                </textarea>
+                            
+                        </td>
+
+                        <td *ngIf="!editable" style="text-align: justify">{{item.assessedBy}}</td>
+                        <td *ngIf="editable" >
+                            
+                                <textarea [(ngModel)]="item.assessedBy" placeholder="All or select grades"
+                                    (keyup)="addData($event, i, 3)" 
+                                    required class="form-control adt-boxer" rows="3" ></textarea>
+                            
+                        </td>
+                        <td *ngIf="!editable" style="text-align: justify">{{item.dataCollected}}</td>
+                        <td *ngIf="editable">
+                            
+                                <textarea [(ngModel)]="item.dataCollected" placeholder="MM/DD/YYYY"
+                                    (keyup)="addData($event, i, 4)" 
+                                    required class="form-control adt-boxer" rows="2"></textarea>
+                            
+                        </td>
+                        <td style="text-align: justify" *ngIf="!editable" class="col-md-4">{{item.learningTarget}}</td>
+                        <td *ngIf="editable" class="col-md-4">
+                            
+                                <textarea 
+                                    [(ngModel)]="item.learningTarget" 
+                                    placeholder="ELA, Math, Science, Social Studies, Religion"
+                                    (keyup)="addData($event, i, 5)" 
+                                    
+                                    required 
+                                    class="form-control adt-boxer"
+                                    
+                                    rows="3"
+                                ></textarea>
+                            
+                        </td>
+                        <td *ngIf="!editable" style="text-align: justify">{{item.assessmentResponsibleMember}}</td>
+                        <td *ngIf="editable">
+                            
+                                <textarea [(ngModel)]="item.assessmentResponsibleMember" placeholder="Name of staff member(s)" (keyup)="addData($event, i, 6)"
+                                     required class="form-control adt-boxer" rows="2"></textarea>
+                            
+                        </td>
+                        <td class="text-center">
+                            <input class="form-check-input" type="checkbox" [(ngModel)]="item.adtCheck" [disabled]="!editable">
+                        </td>
+                        <td>
+                            <a title="Delete row" class="iconlinks redclor" (click)="deleteRow(mymodal, item, i)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                    class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                    <path
+                                        d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                                </svg>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="text-right pt-2">
+                <button class="btn btn-primary-myblue" (click)="addRow()">Add row</button>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #mymodal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title mb-0">Data Assesment Plan</h4>
+        <button type="button" class="close-button" aria-label="Close" (click)="modal.dismiss()">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        Are you sure you want to delete ?
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.close()">No</button>
+        <button type="button" class="btn btn-primary" (click)="deleteDataAssessment()">Yes</button>
+    </div>
+</ng-template>

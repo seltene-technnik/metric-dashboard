@@ -1,0 +1,54 @@
+<section *ngIf="!signup">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div class="mt-20 text-center">
+                    <h5 class="font-size-14 mb-1">Sign in with</h5>
+                    <ul class="list-inline">
+                        <li class="list-inline-item" (click)="googleSignIn()"><a class="sociallogo"><img
+                                    src="../../assets/images/google-logo.svg" class="button-logo"> Sign in with
+                                Google </a></li>
+                        <li class="list-inline-item"><a class="sociallogo" (click)="MSLogin()"><img
+                                    src="../../assets/images/microsoft.svg" class="button-logo"> Sign in with
+                                Microsoft </a></li>
+                    </ul>
+                    <!-- <span>Don't have an account create now <a style="cursor: pointer;" (click)="swichToSignup()">Sign Up</a></span> -->
+                </div>
+            </div>
+            <div class="col-md-4 offset-md-4" *ngIf="invalid">
+                <p>
+                    <ngb-alert [dismissible]="false" class="text-center">
+                        Invalid Credentials
+                    </ngb-alert>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+<section *ngIf="signup">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div class="mt-20 text-center">
+                    <h5 class="font-size-14 mb-1">Sign up with</h5>
+                    <ul class="list-inline">
+                        <li class="list-inline-item" (click)="googleSignIn()"><a class="sociallogo"><img
+                                    src="../../assets/images/google-logo.svg" class="button-logo"> Sign up with
+                                Google </a></li>
+                        <li class="list-inline-item"><a class="sociallogo" (click)="MSLogin()"><img
+                                    src="../../assets/images/microsoft.svg" class="button-logo"> Sign up with
+                                Microsoft </a></li>
+                    </ul>
+                    <span>Already have an account? <a style="cursor: pointer;" (click)="swichToSignup()">Sign In</a></span>
+                </div>
+            </div>
+            <div class="col-md-4 offset-md-4" *ngIf="userExist">
+                <p>
+                    <ngb-alert [dismissible]="false" class="text-center">
+                        User Already Exist
+                    </ngb-alert>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
